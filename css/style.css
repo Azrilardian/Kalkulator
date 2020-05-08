@@ -52,6 +52,10 @@ span::selection {
     }
 }
 
+#display span {
+    font-weight: 300;
+}
+
 .num {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -92,4 +96,10 @@ span::selection {
 
 .num h1.white {
     background-color: whitesmoke;
+}
+
+@media(max-width : 576px) {
+    .num {
+        cursor: default;
+    }
 }

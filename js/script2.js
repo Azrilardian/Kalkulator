@@ -27,7 +27,7 @@ const Kalkulator = function () {
 	//? Mengambil inputan user
 	function getNumbers(digit) {
 		//? Jika user memasukan angka tidak lebih dari 22
-		if (bilangan.textContent.length < 22) {
+		if (bilangan.textContent.length < 20) {
 			//? Jika hasil sudah dikeluarkan
 			if (allNeed.checkBilangan == false && bilangan.textContent.length >= 0) {
 				allNeed.displayArr = "";
