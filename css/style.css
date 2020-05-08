@@ -1,0 +1,95 @@
+html,
+body {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+    background: linear-gradient(to bottom right, rgb(43, 43, 43), rgb(0, 0, 0));
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+h1::selection,
+span::selection {
+    color: none;
+}
+
+.container {
+    width: 400px;
+    display: grid;
+    grid-template-rows: 110px auto;
+    overflow: hidden;
+    border-radius: 2px;
+    box-shadow: 2px 3px 4px rgb(22, 22, 22);
+}
+
+.display-container {
+    background-color: rgb(19, 19, 19);
+    color: whitesmoke;
+    font-size: 25px;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+#display::after {
+    content: "";
+    border-right: 1px solid white;
+    animation: blink 0.5s infinite ease;
+}
+
+@keyframes blink {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.num {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(5, 80px);
+    background: linear-gradient(to bottom right, rgb(5, 153, 153), rgb(2, 92, 92));
+    cursor: pointer;
+}
+
+.num h1 {
+    border: 1px solid rgba(58, 58, 58, 0.158);
+    font-size: 23px;
+    transition: 0.1s ease;
+    font-weight: 400;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+}
+
+.num h1.operator {
+    background-color: rgba(245, 245, 245, 0.082);
+    color: whitesmoke;
+}
+
+.num h1.equals {
+    background-color: whitesmoke;
+    color: teal;
+}
+
+.num h1:hover {
+    background-color: rgba(5, 202, 202, 0.274);
+}
+
+.num h1.equals:hover {
+    background-color: rgba(245, 245, 245, 0.747);
+}
+
+.num h1.white {
+    background-color: whitesmoke;
+}
