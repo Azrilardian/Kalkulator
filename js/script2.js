@@ -20,22 +20,20 @@ const Kalkulator = function () {
 	};
 
 	//? Update display setiap tombol ditekan
-	function updateDisplay() {
-		bilangan.textContent = allNeed.displayArr;
-	}
+	const updateDisplay = () => (bilangan.textContent = allNeed.displayArr);
 
 	//? Mengambil inputan user
 	function getNumbers(digit) {
 		//? Jika user memasukan angka tidak lebih dari 22
 		if (bilangan.textContent.length < 20) {
 			//? Jika hasil sudah dikeluarkan
-			if (allNeed.checkBilangan == false && bilangan.textContent.length >= 0) {
+			if (!allNeed.checkBilangan && bilangan.textContent.length >= 0) {
 				allNeed.displayArr = "";
 				bilangan.textContent = "";
 				allNeed.displayArr += digit;
 				allNeed.checkBilangan = true;
 				//? Jika hasil ditimpa dengan bilangan baru atau jika hasil belum dikeluarkan
-			} else if (allNeed.checkBilangan == true && bilangan.textContent.length >= 0) {
+			} else if (allNeed.checkBilangan && bilangan.textContent.length >= 0) {
 				allNeed.displayArr += digit;
 			}
 		} else {
@@ -49,23 +47,23 @@ const Kalkulator = function () {
 	//? Aturan penggunaan koma
 	function koma(koma) {
 		//? Jika user memasukan koma setelah hasil dikeluarkan
-		if (koma == "." && allNeed.checkBilangan == false && bilangan.textContent.length >= 0) {
+		if (koma == "." && !allNeed.checkBilangan && bilangan.textContent.length >= 0) {
 			allNeed.displayArr = "";
 			bilangan.textContent = "";
 			allNeed.displayArr = koma;
 			allNeed.checkBilangan = true;
 		} //? jika user memasukan koma pada kondisi checkkoma bernilai true
-		else if (koma == "." && allNeed.checkKoma == true) {
+		else if (koma == "." && allNeed.checkKoma) {
 			allNeed.displayArr += koma;
 			allNeed.checkKoma = false;
 			//? Jika user memasukan koma pada kondisi checkkoma bernilai false
-		} else if (allNeed.checkOperator == false) {
+		} else if (!allNeed.checkOperator) {
 			return;
 		}
 	}
 
 	//? Aturan penggunaan clear
-	function clear() {
+	const clear = () => {
 		allNeed.waitingForSecondNumber = false;
 		allNeed.operator = null;
 		allNeed.checkOperator = false;
@@ -82,15 +80,13 @@ const Kalkulator = function () {
 
 	function operator(operator) {
 		//? Jika user memasukan salah satu operator pada kondisi belum ada angka yang ditekan
-		if (allNeed.checkOperator == false) {
-			return;
-			//? Jika user memasukan salah satu operator pada kondisi sudah ada angka yang ditekan
-		} else if (bilangan.textContent != "" && allNeed.waitingForSecondNumber == true) {
+		if (!allNeed.checkOperator) return;
+		//? Jika user memasukan salah satu operator pada kondisi sudah ada angka yang ditekan
+		else if (bilangan.textContent != "" && allNeed.waitingForSecondNumber) {
 			//? Jika operator sudah ditetapkan
-			if (allNeed.operator != null) {
-				return;
-				//? Jika opertor belum ditetapkan
-			} else if (allNeed.operator == null) {
+			if (allNeed.operator != null) return;
+			//? Jika opertor belum ditetapkan
+			else if (allNeed.operator == null) {
 				bilPertama.textContent = bilangan.textContent;
 				allNeed.displayArr = "";
 				allNeed.operator = operator;
@@ -116,15 +112,13 @@ const Kalkulator = function () {
 		//? Jika belum ada operator yang diterima
 		if (allNeed.displayArr != "" || op.textContent == "") {
 			//? Jika user ingin menghapus hasil
-			if (allNeed.hasil == true) {
-				clear();
-			} else {
+			if (allNeed.hasil == true) clear();
+			else {
 				for (let j = 0; j < allNeed.displayArr.length; j++) {
 					//? Jika koma belum dihapus
-					if (allNeed.displayArr.includes(".")) {
-						allNeed.displayArr = hapusAngkaDisplay;
-						//? Jika koma dihapus
-					} else {
+					if (allNeed.displayArr.includes(".")) allNeed.displayArr = hapusAngkaDisplay;
+					//? Jika koma dihapus
+					else {
 						allNeed.displayArr = hapusAngkaDisplay;
 						allNeed.checkKoma = true;
 					}
@@ -137,88 +131,76 @@ const Kalkulator = function () {
 			bilPertama.textContent = "";
 			allNeed.checkOperator = true;
 			allNeed.operator = null;
-		} //? Jika operator sudah dihapus
-		else if (bilPertama.textContent != "" && op.textContent == "") {
-			bilPertama.textContent = hapusAngkaBilPertama;
-		} //? Jika bilangan pertama sudah diterima, operator sudah diterima dan bilangan kedua sudah diterima
-		else if (bilPertama.textContent != "" && op.textContent != "" && allNeed.displayArr != "") {
-			allNeed.displayArr = hapusAngkaDisplay;
 		}
+		//? Jika operator sudah dihapus
+		else if (bilPertama.textContent != "" && op.textContent == "") bilPertama.textContent = hapusAngkaBilPertama;
+		//? Jika bilangan pertama sudah diterima, operator sudah diterima dan bilangan kedua sudah diterima
+		else if (bilPertama.textContent != "" && op.textContent != "" && allNeed.displayArr != "") allNeed.displayArr = hapusAngkaDisplay;
 	}
 
 	function equals() {
 		let hasil;
 		//? Jika belum ada bilangan yang dimasukan
-		if (allNeed.operator == null && bilPertama.textContent == "" && allNeed.bilPersenSatu == "") {
-			return;
-			//? Jika bilangan pertama sudah diterima dan operator sudah diterima tetapi bulum ada bilangan kedua yang diterima
-		} else if (bilPertama.textContent != "" && allNeed.operator != null && allNeed.displayArr == "") {
-			return;
-			//? Jika bilangan pertama adalah persen
-		} else if (bilPertama.textContent == "" && allNeed.bilPersenSatu != "" && allNeed.operator == null) {
+		if (allNeed.operator == null && bilPertama.textContent == "" && allNeed.bilPersenSatu == "") return;
+		//? Jika bilangan pertama sudah diterima dan operator sudah diterima tetapi bulum ada bilangan kedua yang diterima
+		else if (bilPertama.textContent != "" && allNeed.operator != null && allNeed.displayArr == "") return;
+		//? Jika bilangan pertama adalah persen
+		else if (bilPertama.textContent == "" && allNeed.bilPersenSatu != "" && allNeed.operator == null) {
 			hasil = allNeed.bilPersenSatu.toString();
 			allNeed.displayArr = hasil;
 			allNeed.checkBilangan = false;
 			allNeed.hasilPersen = false;
 			allNeed.hasil = true;
 		} else {
+			const persenSatuKeFloat = parseFloat(allNeed.bilPersenSatu);
+			const persenDuaKeFloat = parseFloat(allNeed.bilPersenDua);
+			const { bilPersenSatu : persenSatu, bilPersenDua : persenDua } = allNeed;
 			if (allNeed.operator == "x") {
 				//? Jika user memasukan persen pada bilangan pertama dan memasukan persen pada bilangan kedua
-				if (allNeed.bilPersenSatu != "" && allNeed.bilPersenDua != "") {
-					hasil = parseFloat(allNeed.bilPersenSatu) * parseFloat(allNeed.bilPersenDua);
-					//? Jika user memasukan persen pada bilangan pertama dan tidak memasukan persen pada bilangan kedua
-				} else if (allNeed.bilPersenSatu != "" && allNeed.bilPersenDua == "") {
-					hasil = parseFloat(allNeed.bilPersenSatu) * parseFloat(allNeed.displayArr);
-					//? Jika user tidak memasukan persen pada bilangan pertama dan memasukan persen pada bilangan kedua
-				} else if (allNeed.bilPersenSatu == "" && allNeed.bilPersenDua != "") {
-					hasil = parseFloat(bilPertama.textContent) * parseFloat(allNeed.bilPersenDua);
-					//? Jika user tidak memasukan persen pada bilangan pertama dan kedua
-				} else {
+				if (persenSatu != "" && persenDua != "") hasil = persenSatuKeFloat * persenDuaKeFloat;
+				//? Jika user memasukan persen pada bilangan pertama dan tidak memasukan persen pada bilangan kedua
+				else if (persenSatu != "" && persenDua == "") hasil = persenSatuKeFloat * parseFloat(allNeed.displayArr);
+				//? Jika user tidak memasukan persen pada bilangan pertama dan memasukan persen pada bilangan kedua
+				else if (persenSatu == "" && persenDua != "") hasil = parseFloat(bilPertama.textContent) * persenDuaKeFloat;
+				//? Jika user tidak memasukan persen pada bilangan pertama dan kedua
+				else {
 					hasil = parseFloat(bilPertama.textContent) * parseFloat(allNeed.displayArr);
 				}
 			} else if (allNeed.operator == ":") {
 				//? Jika user memasukan persen pada bilangan pertama dan memasukan persen pada bilangan kedua
-				if (allNeed.bilPersenSatu != "" && allNeed.bilPersenDua != "") {
-					hasil = parseFloat(allNeed.bilPersenSatu) / parseFloat(allNeed.bilPersenDua);
-					//? Jika user memasukan persen pada bilangan pertama dan tidak memasukan persen pada bilangan kedua
-				} else if (allNeed.bilPersenSatu != "" && allNeed.bilPersenDua == "") {
-					hasil = parseFloat(allNeed.bilPersenSatu) / parseFloat(allNeed.displayArr);
-					//? Jika user tidak memasukan persen pada bilangan pertama dan memasukan persen pada bilangan kedua
-				} else if (allNeed.bilPersenSatu == "" && allNeed.bilPersenDua != "") {
-					hasil = parseFloat(bilPertama.textContent) / parseFloat(allNeed.bilPersenDua);
-					//? Jika user tidak memasukan persen pada bilangan pertama dan kedua
-				} else {
+				if (persenSatu != "" && persenDua != "") hasil = persenSatuKeFloat / persenDuaKeFloat;
+				//? Jika user memasukan persen pada bilangan pertama dan tidak memasukan persen pada bilangan kedua
+				else if (persenSatu != "" && persenDua == "") hasil = persenSatuKeFloat / parseFloat(allNeed.displayArr);
+				//? Jika user tidak memasukan persen pada bilangan pertama dan memasukan persen pada bilangan kedua
+				else if (persenSatu == "" && persenDua != "") hasil = parseFloat(bilPertama.textContent) / persenDuaKeFloat;
+				//? Jika user tidak memasukan persen pada bilangan pertama dan kedua
+				else {
 					hasil = parseFloat(bilPertama.textContent) / parseFloat(allNeed.displayArr);
 				}
 			} else if (allNeed.operator == "+") {
 				//? Jika user memasukan persen pada bilangan pertama dan memasukan persen pada bilangan kedua
-				if (allNeed.bilPersenSatu != "" && allNeed.bilPersenDua != "") {
-					hasil = parseFloat(allNeed.bilPersenSatu) + parseFloat(allNeed.bilPersenDua);
-					//? Jika user memasukan persen pada bilangan pertama dan tidak memasukan persen pada bilangan kedua
-				} else if (allNeed.bilPersenSatu != "" && allNeed.bilPersenDua == "") {
-					hasil = parseFloat(allNeed.bilPersenSatu) + parseFloat(allNeed.displayArr);
-					//? Jika user tidak memasukan persen pada bilangan pertama dan memasukan persen pada bilangan kedua
-				} else if (allNeed.bilPersenSatu == "" && allNeed.bilPersenDua != "") {
-					hasil = parseFloat(bilPertama.textContent) + parseFloat(allNeed.bilPersenDua);
-					//? Jika user tidak memasukan persen pada bilangan pertama dan kedua
-				} else {
+				if (persenSatu != "" && persenDua != "") hasil = persenSatuKeFloat + persenDuaKeFloat;
+				//? Jika user memasukan persen pada bilangan pertama dan tidak memasukan persen pada bilangan kedua
+				else if (persenSatu != "" && persenDua == "") hasil = persenSatuKeFloat + parseFloat(allNeed.displayArr);
+				//? Jika user tidak memasukan persen pada bilangan pertama dan memasukan persen pada bilangan kedua
+				else if (persenSatu == "" && persenDua != "") hasil = parseFloat(bilPertama.textContent) + persenDuaKeFloat;
+				//? Jika user tidak memasukan persen pada bilangan pertama dan kedua
+				else {
 					hasil = parseFloat(bilPertama.textContent) + parseFloat(allNeed.displayArr);
 				}
 			} else if (allNeed.operator == "-") {
 				//? Jika user memasukan persen pada bilangan pertama dan memasukan persen pada bilangan kedua
-				if (allNeed.bilPersenSatu != "" && allNeed.bilPersenDua != "") {
-					hasil = parseFloat(allNeed.bilPersenSatu) - parseFloat(allNeed.bilPersenDua);
-					//? Jika user memasukan persen pada bilangan pertama dan tidak memasukan persen pada bilangan kedua
-				} else if (allNeed.bilPersenSatu != "" && allNeed.bilPersenDua == "") {
-					hasil = parseFloat(allNeed.bilPersenSatu) - parseFloat(allNeed.displayArr);
-					//? Jika user tidak memasukan persen pada bilangan pertama dan memasukan persen pada bilangan kedua
-				} else if (allNeed.bilPersenSatu == "" && allNeed.bilPersenDua != "") {
-					hasil = parseFloat(bilPertama.textContent) - parseFloat(allNeed.bilPersenDua);
-					//? Jika user tidak memasukan persen pada bilangan pertama dan kedua
-				} else {
+				if (persenSatu != "" && persenDua != "") hasil = persenSatuKeFloat - persenDuaKeFloat;
+				//? Jika user memasukan persen pada bilangan pertama dan tidak memasukan persen pada bilangan kedua
+				else if (persenSatu != "" && persenDua == "") hasil = persenSatuKeFloat - parseFloat(allNeed.displayArr);
+				//? Jika user tidak memasukan persen pada bilangan pertama dan memasukan persen pada bilangan kedua
+				else if (persenSatu == "" && persenDua != "") hasil = parseFloat(bilPertama.textContent) - persenDuaKeFloat;
+				//? Jika user tidak memasukan persen pada bilangan pertama dan kedua
+				else {
 					hasil = parseFloat(bilPertama.textContent) - parseFloat(allNeed.displayArr);
 				}
 			}
+
 			hasil = hasil.toString();
 			for (i = 0; i <= hasil.length; i++) {
 				if (hasil[i] == ".") {
@@ -228,6 +210,7 @@ const Kalkulator = function () {
 					allNeed.displayArr = hasil;
 				}
 			}
+			
 			bilPertama.textContent = "";
 			op.textContent = "";
 			allNeed.operator = null;
@@ -241,33 +224,24 @@ const Kalkulator = function () {
 	}
 
 	function invers() {
-		if (allNeed.displayArr.length == 0) {
-			return;
-		} else {
-			allNeed.displayArr = allNeed.displayArr *= -1;
-		}
+		if (allNeed.displayArr.length == 0) return;
+		allNeed.displayArr = allNeed.displayArr *= -1;
+
 	}
 
 	function persen(persen) {
-		if (persen == "%" && allNeed.checkPersen == true) {
+		if (persen == "%" && allNeed.checkPersen) {
 			//? Jika user memasukan persen ketika tidak ada bilangan yang dimasukan
-			if (allNeed.displayArr.length == 0) {
-				return;
-				//? Jika user memasukan persen pada bilangan pertama
-			} else if (bilPertama.textContent == "" && allNeed.bilPersenSatu == "") {
-				allNeed.bilPersenSatu = allNeed.displayArr / 100;
-				//? Jika user memasukan persen pada bilangan pertama dan kedua
-			} else if (allNeed.bilPersenSatu != "" && allNeed.bilPersenDua == "") {
-				allNeed.bilPersenDua = allNeed.displayArr / 100;
-				//? Jika user tidak memasukan persen pada bilangan pertama, dan memasukan persen pada bilangan kedua
-			} else if (bilPertama.textContent != "" && allNeed.bilPersenSatu == "") {
-				allNeed.bilPersenDua = allNeed.displayArr / 100;
-			}
+			if (allNeed.displayArr.length == 0) return;
+			//? Jika user memasukan persen pada bilangan pertama
+			else if (bilPertama.textContent == "" && allNeed.bilPersenSatu == "") allNeed.bilPersenSatu = allNeed.displayArr / 100;
+			//? Jika user memasukan persen pada bilangan pertama dan kedua
+			else if (allNeed.bilPersenSatu != "" && allNeed.bilPersenDua == "") allNeed.bilPersenDua = allNeed.displayArr / 100;
+			//? Jika user tidak memasukan persen pada bilangan pertama, dan memasukan persen pada bilangan kedua
+			else if (bilPertama.textContent != "" && allNeed.bilPersenSatu == "") allNeed.bilPersenDua = allNeed.displayArr / 100;
 			allNeed.displayArr += persen;
 			allNeed.checkPersen = false;
-		} else if (persen == "%" && allNeed.checkOperator == false) {
-			return;
-		}
+		} else if (persen == "%" && !allNeed.checkOperator) return;
 	}
 
 	buttons.forEach(function (button) {
